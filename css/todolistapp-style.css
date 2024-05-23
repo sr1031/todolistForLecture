@@ -51,6 +51,22 @@ main {
     margin-bottom: 25px;
 }
 
+#list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 #list li {
     margin-bottom: 10px;
+}
+
+.pages {
+    margin-top: 15px;
+}
+
+.pages span{
+    margin-right: 15px;
+    cursor: pointer;
 }
