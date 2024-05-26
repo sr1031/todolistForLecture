@@ -27,9 +27,14 @@ const loadList = (page) => {
         if (getTodo) {
             const newLi = document.createElement('li');
             const checkBox = document.createElement('input');
-            checkBox.type = 'checkbox';
-            newLi.appendChild(checkBox);
-            newLi.append(" " + getTodo);
+            const checkBoxLabel = document.createElement('label');
+            const checkSpan = document.createElement('span');
+            checkBox.type = "checkbox";
+            checkSpan.classList.add("check");
+            checkBoxLabel.append(getTodo);
+            checkBoxLabel.append(checkBox);
+            checkBoxLabel.append(checkSpan);
+            newLi.append(checkBoxLabel);
             newLi.value = i + j;
             eventTargets.list.appendChild(newLi);
         }
@@ -125,10 +130,21 @@ eventTargets.input.addEventListener("keydown", (event) => {
     }
 });
 
+eventTargets.list.addEventListener("click", (event) => {
+    if (event.target.nodeName === "SPAN") {
+        const label = event.target.parentNode;
+        const checkBox = label.firstElementChild;
+        if (!checkBox.checked)
+            label.style = "text-decoration: line-through; color: gray;";
+        else
+            label.style = "text-decoration: none; color: black;";
+    }
+})
+
 eventTargets.list.addEventListener("dblclick", (event) => {
-    if (event.target.nodeName === "LI") {
-        const idx = event.target.value;
-        event.target.parentNode.removeChild(event.target);
+    if (event.target.nodeName === "LABEL") {
+        const idx = event.target.parentNode.value;
+        eventTargets.list.removeChild(event.target.parentNode);
         todoLocalStorage.removeTodo(idx);
         pagenation(todoLocalStorage.getAllTodo());
         refrashList(nowPage);
