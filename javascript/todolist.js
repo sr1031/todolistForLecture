@@ -1,5 +1,4 @@
 "use strict";
-
 const eventTargets = {
     input: document.querySelector("#todo"),
     list: document.querySelector("#list"),
@@ -7,14 +6,6 @@ const eventTargets = {
 
 const pages = document.querySelector(".pages");
 const allDelete = document.querySelector(".all__delete div");
-const todoContents = Array(...eventTargets.list.children).map(
-    (li) => {
-        return {
-            content: li.innerText,
-            completed: false
-        };
-    }
-);
 
 let nowPage = 1;
 const pageSize = 3;
@@ -31,10 +22,10 @@ const loadList = (page) => {
     for (let j = 0; j < pageSize; j++) {
         const getTodo = todoLocalStorage.getTodoByIdx(i + j);
         if (getTodo) {
-            const newLi = document.createElement('li');
-            const checkBox = document.createElement('input');
-            const checkBoxLabel = document.createElement('label');
-            const checkSpan = document.createElement('span');
+            const newLi = document.createElement("li");
+            const checkBox = document.createElement("input");
+            const checkBoxLabel = document.createElement("label");
+            const checkSpan = document.createElement("span");
             checkBox.type = "checkbox";
             checkBox.checked = getTodo.completed;
             if (checkBox.checked) {
@@ -61,8 +52,7 @@ const isEmptyPage = (page) => {
 
 const refrashList = (nowPage) => {
     deleteList(eventTargets.list.children);
-    if (isEmptyPage(nowPage))
-        loadList(nowPage);
+    if (isEmptyPage(nowPage)) loadList(nowPage);
     else {
         nowPage = nowPage - 1;
         loadList(nowPage);
@@ -71,17 +61,16 @@ const refrashList = (nowPage) => {
 
 class todoLocalStorage {
     constructor() {
-        if (!localStorage.getItem("todos"))
-            localStorage.setItem("todos", JSON.stringify(todoContents));
-        else refrashList(1);
+        if (localStorage.getItem("todos")) refrashList(1);
+    }
+    
+    static getAllTodo() {
+        const nowAllTodo = JSON.parse(localStorage.getItem("todos"));
+        return nowAllTodo? nowAllTodo : [];
     }
 
     static getTodoLength() {
-        return JSON.parse(localStorage.getItem("todos")).length;
-    }
-
-    static getAllTodo() {
-        return JSON.parse(localStorage.getItem("todos"));
+        return todoLocalStorage.getAllTodo().length;
     }
 
     static getTodoByIdx(idx) {
@@ -96,12 +85,14 @@ class todoLocalStorage {
 
     static removeTodo(idx) {
         const nowTodos = todoLocalStorage.getAllTodo();
-        nowTodos.splice(idx, 1);
-        localStorage.setItem("todos", JSON.stringify(nowTodos));
+        if (nowTodos.length > 1) {
+            nowTodos.splice(idx, 1);
+            localStorage.setItem("todos", JSON.stringify(nowTodos));
+        } else localStorage.removeItem("todos");
     }
 
     static removeAllTodo() {
-        localStorage.setItem("todos", JSON.stringify([]));
+        localStorage.removeItem("todos");
     }
 
     static checkTodo(idx, isChecked) {
@@ -163,15 +154,14 @@ eventTargets.list.addEventListener("click", (event) => {
             event.target.classList.add("checked");
             checkBox.checked = true;
             todoLocalStorage.checkTodo(label.parentNode.value, true);
-        }
-        else {
+        } else {
             label.classList.remove("completed__todo");
             event.target.classList.remove("checked");
             checkBox.checked = false;
             todoLocalStorage.checkTodo(label.parentNode.value, false);
         }
     }
-})
+});
 
 eventTargets.list.addEventListener("dblclick", (event) => {
     if (event.target.nodeName === "LABEL") {
@@ -188,4 +178,4 @@ allDelete.addEventListener("click", () => {
     nowPage = 1;
     refrashList(nowPage);
     pagenation(todoLocalStorage.getTodoLength());
-})
+});

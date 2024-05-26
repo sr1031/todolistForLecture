@@ -10,7 +10,10 @@ html {
 
 body {
     height: 100vh;
-    background-image: url("../image/clear.jpg");
+}
+
+.clear {
+    background-image: url("../image/drizzle_rain.jpg");
     background-size: cover;
 }
 
@@ -42,8 +45,8 @@ body {
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    color: white;
-    text-shadow: 3px 2px rgba(43, 43, 43, 0.325);
+    color: rgb(244, 244, 244);
+    text-shadow: -1px 0 black, 0 1px black, 2px 0 black, 0 -1px black;
 }
 
 main {
@@ -66,10 +69,10 @@ main {
 #todo {
     width: 220px;
     height: 30px;
-    background-color: #000000c1;
+    background-color: #000000b0;
     border: 2px white solid;
     border-radius: 10px;
-    text-indent: 23px;
+    text-align: center;
     color: white;
     margin-bottom: 10px;
 }
@@ -90,6 +93,7 @@ main {
     align-items: center;
     border: 2px rgba(42, 42, 42, 0.789) solid;
     border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.278);
     overflow-x: visible;
 }
 
@@ -97,32 +101,35 @@ main {
 #list li {
     margin-bottom: 10px;
     color: rgb(0, 0, 0);
+    background-color: none;
+    padding-left: 5px;
 }
 
 .pages {
     margin-top: 15px;
     position: absolute;
-    top: 200px;
+    top: 215px;
 }
 
 .pages span{
     color: rgba(0, 0, 0, 0.8);
     font-weight: 700;
-    border: 2px rgba(255, 255, 255, 0.805) solid;
+    border: 2px rgba(18, 18, 18, 0.805) solid;
     border-radius: 5px;
-    margin-right: 15px;
+    background-color: rgba(238, 238, 238, 0.771);
+    margin: 1px 7px;
     cursor: pointer;
-    padding: 2px;
+    padding: 0px 2px 2px 2px;
 }
 
 
 .all__delete div {
     font-size: 14px;
-    color: rgba(0, 0, 0, 0.921);
+    color: rgba(0, 0, 0, 0.779);
     font-weight: 700;
     border: 2px black solid;
     border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.789);
+    background-color: rgba(255, 255, 255, 0.79);
     margin: 5px 0px 3px 0px;
     padding: 2px;
     cursor: pointer;
@@ -138,6 +145,7 @@ main {
     flex-direction: row;
     align-items: center;
     position: relative;
+    text-shadow: 1px 1px rgba(113, 113, 113, 0.408);
 }
 
 #list input {
@@ -149,11 +157,11 @@ main {
     height: 15px;
     border: 1px black solid;
     border-radius: 3px;
-    background-color: #e3e3e3c3;
+    background-color: rgba(238, 238, 238, 0.771);;
     font-size: 10px;
     position: absolute;
-    top: 2px;
-    left: -20px;
+    top: 3px;
+    left: -19px;
     cursor: pointer;
 }
 
@@ -166,8 +174,8 @@ main {
     border: solid black;
     border-width: 0px 2px 2px 0px;
     transform: rotate(40deg);
-    top: 0px;
-    left: 3.3113px;
+    top: 0.5px;
+    left: 3.5px;
 }
 
 .completed__todo {
