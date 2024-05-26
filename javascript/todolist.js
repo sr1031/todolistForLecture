@@ -6,6 +6,7 @@ const eventTargets = {
 };
 
 const pages = document.querySelector(".pages");
+const allDelete = document.querySelector(".all__delete div");
 const todoContents = Array(...eventTargets.list.children).map(
     (li) => {
         return {
@@ -99,6 +100,10 @@ class todoLocalStorage {
         localStorage.setItem("todos", JSON.stringify(nowTodos));
     }
 
+    static removeAllTodo() {
+        localStorage.setItem("todos", JSON.stringify([]));
+    }
+
     static checkTodo(idx, isChecked) {
         const nowTodos = todoLocalStorage.getAllTodo();
         nowTodos[idx].completed = isChecked;
@@ -178,4 +183,9 @@ eventTargets.list.addEventListener("dblclick", (event) => {
     }
 });
 
-
+allDelete.addEventListener("click", () => {
+    todoLocalStorage.removeAllTodo();
+    nowPage = 1;
+    refrashList(nowPage);
+    pagenation(todoLocalStorage.getTodoLength());
+})

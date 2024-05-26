@@ -33,7 +33,7 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .header__title__wrapper {
@@ -56,7 +56,7 @@ main {
 }
 
 .service__wrapper__elements {
-    height: calc(300px - 105px);
+    height: calc(300px - 100px);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -71,6 +71,7 @@ main {
     border-radius: 10px;
     text-indent: 23px;
     color: white;
+    margin-bottom: 10px;
 }
 
 .wrapper__list {
@@ -114,6 +115,19 @@ main {
     padding: 2px;
 }
 
+
+.all__delete div {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.921);
+    font-weight: 700;
+    border: 2px black solid;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.789);
+    margin: 5px 0px 3px 0px;
+    padding: 2px;
+    cursor: pointer;
+}
+
 #list {
     list-style: none;
 }
@@ -140,6 +154,7 @@ main {
     position: absolute;
     top: 2px;
     left: -20px;
+    cursor: pointer;
 }
 
 .checked::after {
