@@ -7,7 +7,12 @@ const eventTargets = {
 
 const pages = document.querySelector(".pages");
 const todoContents = Array(...eventTargets.list.children).map(
-    (li) => li.innerText
+    (li) => {
+        return {
+            content: li.innerText,
+            completed: false
+        };
+    }
 );
 
 let nowPage = 1;
@@ -30,11 +35,16 @@ const loadList = (page) => {
             const checkBoxLabel = document.createElement('label');
             const checkSpan = document.createElement('span');
             checkBox.type = "checkbox";
+            checkBox.checked = getTodo.completed;
+            if (checkBox.checked) {
+                checkBoxLabel.classList.add("completed__todo");
+                checkSpan.classList.add("checked");
+            }
             checkSpan.classList.add("check");
-            checkBoxLabel.append(getTodo);
-            checkBoxLabel.append(checkBox);
+            checkBoxLabel.append(getTodo.content);
             checkBoxLabel.append(checkSpan);
             newLi.append(checkBoxLabel);
+            newLi.append(checkBox);
             newLi.value = i + j;
             eventTargets.list.appendChild(newLi);
         }
@@ -65,24 +75,33 @@ class todoLocalStorage {
         else refrashList(1);
     }
 
+    static getTodoLength() {
+        return JSON.parse(localStorage.getItem("todos")).length;
+    }
+
     static getAllTodo() {
         return JSON.parse(localStorage.getItem("todos"));
     }
 
     static getTodoByIdx(idx) {
-        const nowTodos = JSON.parse(localStorage.getItem("todos"));
-        return nowTodos[idx];
+        return todoLocalStorage.getAllTodo()[idx];
     }
 
     static addTodo(todo) {
-        const nowTodos = JSON.parse(localStorage.getItem("todos"));
-        nowTodos.push(todo);
+        const nowTodos = todoLocalStorage.getAllTodo();
+        nowTodos.push({ content: todo, completed: false });
         localStorage.setItem("todos", JSON.stringify(nowTodos));
     }
 
     static removeTodo(idx) {
-        const nowTodos = JSON.parse(localStorage.getItem("todos"));
+        const nowTodos = todoLocalStorage.getAllTodo();
         nowTodos.splice(idx, 1);
+        localStorage.setItem("todos", JSON.stringify(nowTodos));
+    }
+
+    static checkTodo(idx, isChecked) {
+        const nowTodos = todoLocalStorage.getAllTodo();
+        nowTodos[idx].completed = isChecked;
         localStorage.setItem("todos", JSON.stringify(nowTodos));
     }
 }
@@ -97,11 +116,11 @@ const pagesDelete = () => {
         });
 };
 
-const pagenation = (contents) => {
+const pagenation = (contentsLength) => {
     const pageNum =
-        contents.length % pageSize > 0
-            ? Math.floor(contents.length / pageSize) + 1
-            : Math.floor(contents.length / pageSize);
+        contentsLength % pageSize > 0
+            ? Math.floor(contentsLength / pageSize) + 1
+            : Math.floor(contentsLength / pageSize);
     pagesDelete();
     Array(pageNum)
         .fill(0)
@@ -112,7 +131,7 @@ const pagenation = (contents) => {
         });
 };
 
-pagenation(todoLocalStorage.getAllTodo());
+pagenation(todoLocalStorage.getTodoLength());
 
 pages.addEventListener("click", (event) => {
     if (event.target.nodeName === "SPAN") {
@@ -124,7 +143,7 @@ pages.addEventListener("click", (event) => {
 eventTargets.input.addEventListener("keydown", (event) => {
     if (event.keyCode === 13 && event.target.value !== "") {
         todoLocalStorage.addTodo(event.target.value);
-        pagenation(todoLocalStorage.getAllTodo());
+        pagenation(todoLocalStorage.getTodoLength());
         event.target.value = "";
         refrashList(nowPage);
     }
@@ -134,10 +153,18 @@ eventTargets.list.addEventListener("click", (event) => {
     if (event.target.nodeName === "SPAN") {
         const label = event.target.parentNode;
         const checkBox = label.firstElementChild;
-        if (!checkBox.checked)
-            label.style = "text-decoration: line-through; color: gray;";
-        else
-            label.style = "text-decoration: none; color: black;";
+        if (!checkBox.checked) {
+            label.classList.add("completed__todo");
+            event.target.classList.add("checked");
+            checkBox.checked = true;
+            todoLocalStorage.checkTodo(label.parentNode.value, true);
+        }
+        else {
+            label.classList.remove("completed__todo");
+            event.target.classList.remove("checked");
+            checkBox.checked = false;
+            todoLocalStorage.checkTodo(label.parentNode.value, false);
+        }
     }
 })
 
@@ -146,7 +173,7 @@ eventTargets.list.addEventListener("dblclick", (event) => {
         const idx = event.target.parentNode.value;
         eventTargets.list.removeChild(event.target.parentNode);
         todoLocalStorage.removeTodo(idx);
-        pagenation(todoLocalStorage.getAllTodo());
+        pagenation(todoLocalStorage.getTodoLength());
         refrashList(nowPage);
     }
 });

@@ -105,11 +105,13 @@ main {
 }
 
 .pages span{
-    color: white;
-    border: 2px black solid;
+    color: rgba(0, 0, 0, 0.8);
+    font-weight: 700;
+    border: 2px rgba(255, 255, 255, 0.805) solid;
     border-radius: 5px;
     margin-right: 15px;
     cursor: pointer;
+    padding: 2px;
 }
 
 #list {
@@ -140,13 +142,9 @@ main {
     left: -20px;
 }
 
-.check::after {
-    display: none;
-    position: absolute;
-}
-
-#list input:checked ~ .check::after {
+.checked::after {
     display: block;
+    position: absolute;
     content: "";
     width: 4px;
     height: 8px;
@@ -154,5 +152,10 @@ main {
     border-width: 0px 2px 2px 0px;
     transform: rotate(40deg);
     top: 0px;
-    left: 3.45px;
+    left: 3.3113px;
+}
+
+.completed__todo {
+    text-decoration: line-through;
+    color: gray;
 }
