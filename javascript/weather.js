@@ -2,20 +2,20 @@ import {apiKey} from "./apiKey.js";
 
 const weatherBackground = document.body;
 
-const askImage = ({weather}) => {
-    const [weatherTitle] = weather;
+const askImage = ([weather]) => {
+    const {main} = weather;
     const hazeImages = ["Mist", "Dust", "Smoke", "Sand", "Ash", "Haze"];
     const darkCloudImages = ["Squall", "Tornado"];
 
-    console.log(weatherTitle.main);
+    console.log(main);
 
-    if (hazeImages.indexOf(weatherTitle.main) !== -1)
+    if (hazeImages.includes(main))
         weatherBackground.style.backgroundImage = "url('../image/Haze.jpg')";
-    else if (darkCloudImages.indexOf(weatherTitle.main) !== -1)
+    else if (darkCloudImages.includes(main))
         weatherBackground.style.backgroundImage =
             "url('../image/Thunderstorm.jpg')";
     else
-        weatherBackground.style.backgroundImage = `url('../image/${weatherTitle.main}.jpg')`;
+        weatherBackground.style.backgroundImage = `url('../image/${main}.jpg')`;
 };
 
 const askWeather = async function ({lat, lon}) {
@@ -29,10 +29,10 @@ const askWeather = async function ({lat, lon}) {
             return jsonObj;
         });
 
-    askImage(weatherInfo);
+    askImage(weatherInfo.weather);
 };
 
-const askLocation = function () {
+const askLocation = async function () {
     navigator.geolocation.getCurrentPosition(({coords}) => {
         const {latitude, longitude} = coords;
         const location = {
@@ -44,7 +44,7 @@ const askLocation = function () {
     });
 };
 
-const askBackgroundImage = async () => {
+const askBackgroundImage = () => {
     askLocation();
 };
 
