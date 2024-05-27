@@ -1,44 +1,43 @@
 import {apiKey} from "./apiKey.js";
 
-let w = undefined;
 const weatherBackground = document.body;
 
-const askImage = (weatherStatus) => {
+const askImage = ({weather}) => {
+    const [weatherTitle] = weather;
     const hazeImages = ["Mist", "Dust", "Smoke", "Sand", "Ash", "Haze"];
     const darkCloudImages = ["Squall", "Tornado"];
 
-    console.log(weatherStatus);
+    console.log(weatherTitle.main);
 
-    if (hazeImages.indexOf(weatherStatus) !== -1)
+    if (hazeImages.indexOf(weatherTitle.main) !== -1)
         weatherBackground.style.backgroundImage = "url('../image/Haze.jpg')";
-    else if (darkCloudImages.indexOf(weatherStatus) !== -1)
+    else if (darkCloudImages.indexOf(weatherTitle.main) !== -1)
         weatherBackground.style.backgroundImage =
             "url('../image/Thunderstorm.jpg')";
     else
-        weatherBackground.style.backgroundImage = `url('../image/${weatherStatus}.jpg')`;
+        weatherBackground.style.backgroundImage = `url('../image/${weatherTitle.main}.jpg')`;
 };
 
-const askWeather = async function (location) {
+const askWeather = async function ({lat, lon}) {
     const weatherInfo = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lon}&appid=${apiKey}`
+        `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`
     )
         .then((weather) => {
-            w = weather.json();
-            return w;
+            return weather.json();
         })
         .then((jsonObj) => {
-            w = jsonObj;
-            return w;
+            return jsonObj;
         });
 
-    askImage(weatherInfo.weather[0].main);
+    askImage(weatherInfo);
 };
 
 const askLocation = function () {
-    navigator.geolocation.getCurrentPosition((loc) => {
+    navigator.geolocation.getCurrentPosition(({coords}) => {
+        const {latitude, longitude} = coords;
         const location = {
-            lon: loc.coords.longitude,
-            lat: loc.coords.latitude,
+            lon: longitude,
+            lat: latitude,
         };
 
         askWeather(location);

@@ -137,8 +137,9 @@ pages.addEventListener("click", (event) => {
 });
 
 eventTargets.input.addEventListener("keydown", (event) => {
-    if (event.keyCode === 13 && event.target.value.trim() !== "") {
-        todoLocalStorage.addTodo(event.target.value);
+    const inputTodo = event.target.value.trim();
+    if (event.keyCode === 13 && inputTodo !== "") {
+        todoLocalStorage.addTodo(inputTodo);
         pagenation(todoLocalStorage.getTodoLength());
         event.target.value = "";
         refrashList(nowPage);
