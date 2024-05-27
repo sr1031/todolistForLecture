@@ -12,9 +12,10 @@ body {
     height: 100vh;
 }
 
-.clear {
-    background-image: url("../image/drizzle_rain.jpg");
+.weather {
+    background-image: url("../image/Drizzle.jpg");
     background-size: cover;
+    transition: all 1.5s ease-in-out;
 }
 
 .wrapper {
